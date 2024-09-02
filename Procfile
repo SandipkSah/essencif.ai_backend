@@ -1,0 +1,1 @@
+web: gunicorn --bind :$PORT --timeout 180 --workers 3 app:app
