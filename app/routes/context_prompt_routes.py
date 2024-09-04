@@ -29,7 +29,8 @@ def get_prompts():
         # Read prompts from Excel
         excel_file = 'Chat GPT.xlsx'
         df_prompt = pd.read_excel(excel_file, sheet_name="Prompts")
-
+        df_prompt = df_prompt[df_prompt['Owner'] == 'Default']
+        
         # Convert DataFrame to JSON
         prompt_data = df_prompt.to_json(orient='records')
 

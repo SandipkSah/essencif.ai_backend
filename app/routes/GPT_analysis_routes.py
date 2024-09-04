@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 OPENAI_KEY =  os.getenv('OPENAI_KEY')
 
 
-document_analysis_blueprint = Blueprint('document_analysis', __name__)
+GPT_analysis_blueprint = Blueprint('document_analysis', __name__)
 
 # def download_save_annual_report(ticker):
 
@@ -215,7 +215,7 @@ def summarize_text_internet(parameter, context):
 
 
 
-@document_analysis_blueprint.route('/api/document_analysis', methods=['POST'])
+@GPT_analysis_blueprint.route('/api/document_analysis', methods=['POST'])
 def document_analysis():
     # Assuming JSON data is sent for Prompt, Context, and the base64-encoded file
     data = request.get_json()
