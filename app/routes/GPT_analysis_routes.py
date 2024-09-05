@@ -19,8 +19,6 @@ GPT_analysis_blueprint = Blueprint('document_analysis', __name__)
 #     sec_report_urls_list_file = "cik_report_urls.csv"
 #     df = pd.read_csv(sec_report_urls_list_file)
     
-#     # Print the ticker for confirmation
-#     print(f"Processing ticker: {ticker}")
     
 #     # Filter the DataFrame to find the row with the matching ticker
 #     report_row = df.loc[df['ticker'].str.lower() == ticker.lower()]
@@ -28,7 +26,6 @@ GPT_analysis_blueprint = Blueprint('document_analysis', __name__)
 #     if not report_row.empty:
 #         # Extract the URL from the filtered DataFrame
 #         url = report_row['report_url'].iloc[0]
-#         print(f"Found URL: {url}")
         
 #         # Code to download and save the annual report can be added here
 #         # For example, using requests or another library to download the file
@@ -54,7 +51,6 @@ GPT_analysis_blueprint = Blueprint('document_analysis', __name__)
         
 #         return temp_file_path
 #     else:
-#         print("something is weird here")
 #         raise Exception(f"Failed to download PDF from {url}. Status code: {response.status_code}")
         
 
@@ -232,7 +228,6 @@ def document_analysis():
     if (analysis_type == "document"):
         base64_file = data.get('pdf_file')
         file_name = data.get('file_name')
-        # print("ehat the fuck is rong")
         if not base64_file or not file_name:
             return jsonify({"error": "PDF file data is required"}), 400
 
@@ -246,7 +241,6 @@ def document_analysis():
         temp_file_path = os.path.join(tempfile.gettempdir(), file_name)
         with open(temp_file_path, 'wb') as temp_file:
             temp_file.write(file_data)
-        print(temp_file_path, "=====")
 
         # Assuming `Prompt` is a JSON string that needs to be converted to a dictionary
         try:
@@ -262,7 +256,6 @@ def document_analysis():
         pdf_text = read_pdf(temp_file_path)
         pdf_text = pdf_text[:500000]  # Limiting the length of text
 
-        print(pdf_text, "-------------------")
 
         # Run the summary function
         response = summarize_text_document(pdf_text, Prompt, Context)
@@ -284,7 +277,7 @@ def document_analysis():
         response = summarize_text_website( link, Prompt, Context)
         return jsonify({"data": response})
 
-    elif (analysis_type == "internet"):
+    elif (analysis_type == "gpt_knowledge"):
 
         # Assuming `Prompt` is a JSON string that needs to be converted to a dictionary
         try:
@@ -300,7 +293,7 @@ def document_analysis():
         response = summarize_text_internet( Prompt, Context)
         return jsonify({"data": response})
 
-    elif (analysis_type == "annual_report"):
+    elif (analysis_type == "sec_filing"):
 
         # Assuming `Prompt` is a JSON string that needs to be converted to a dictionary
         try:
@@ -312,7 +305,6 @@ def document_analysis():
         try:
             ticker = data.get('company_name')
             text_from_html = download_extract_text_annual_report(ticker)
-            print(text_from_html)  
             text_from_html = text_from_html[:500000]  # Limiting the length of text
         except Exception as error :
             print("Something went wrong trying to access Annual report",error)
